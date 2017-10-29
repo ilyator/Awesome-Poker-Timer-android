@@ -20,6 +20,8 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".service.TimerService"/>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="dd5f8517d3e12e31327958a9243413e02eb9cf27" />
