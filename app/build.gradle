@@ -1,4 +1,10 @@
 buildscript {
+    ext {
+        anko_version = '0.10.3'
+        ktx_version = '0.1'
+        support_version = '27.0.2'
+    }
+
     repositories {
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
@@ -7,23 +13,25 @@ buildscript {
     dependencies {
         classpath 'io.fabric.tools:gradle:1.24.4'
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.6.0'
-        classpath "io.realm:realm-gradle-plugin:4.1.0"
-        classpath 'com.google.gms:google-services:3.1.0'
+        classpath "io.realm:realm-gradle-plugin:4.3.3"
+        classpath 'com.google.gms:google-services:3.1.2'
     }
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.ily.pakertymer"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -55,25 +63,21 @@ def renameAPK(variant) {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    implementation "androidx.core:core-ktx:$ktx_version"
     //Support
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
-    compile 'com.android.support:cardview-v7:26.1.0'
+    implementation "com.android.support:appcompat-v7:$support_version"
+    implementation "com.android.support:design:$support_version"
+    implementation "com.android.support:cardview-v7:$support_version"
     //Bottombar
-    compile 'com.roughike:bottom-bar:2.3.1'
-    //Butterknife
-    compile 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.roughike:bottom-bar:2.3.1'
     //Eventbus
-    compile 'org.greenrobot:eventbus:3.0.0'
+    implementation 'org.greenrobot:eventbus:3.0.0'
     //Crashlytics
-    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-
-}
-repositories {
-    mavenCentral()
 }

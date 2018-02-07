@@ -37,7 +37,7 @@ class TimerFragment : Fragment() {
     private var timeFormat: SimpleDateFormat? = null
     private var timerCalendar: Calendar? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val tournament = realm!!.where(Tournament::class.java).equalTo("isActive", true).findFirst()
 
         val root = inflater!!.inflate(R.layout.fragment_timer, container, false)
@@ -61,7 +61,7 @@ class TimerFragment : Fragment() {
     fun onPlayPauseClicked() {
         val intent = Intent(context, TimerService::class.java)
         intent.putExtra(TimerService.KEY_TOURNAMENT, 1)
-        context.startService(intent)
+        context?.startService(intent)
     }
 
     override fun onStart() {

@@ -1,7 +1,6 @@
 package com.ily.pakertymer.fragment
 
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -9,14 +8,13 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.ily.pakertymer.R
 import com.ily.pakertymer.adapter.SavedTourneysAdapter
 import com.ily.pakertymer.adapter.SimpleItemTouchHelperCallback
 import com.ily.pakertymer.model.Tournament
 import io.realm.Realm
 import io.realm.Sort
+import kotlinx.android.synthetic.main.fragment_saved.*
 
 /**
  * Created by ily on 20.10.2016.
@@ -24,27 +22,21 @@ import io.realm.Sort
 
 class SavedFragment : Fragment() {
 
-    @BindView(R.id.rv_saved)
-    lateinit var rvSaved: RecyclerView
-    @BindView(R.id.btn_add)
-    lateinit var btnAdd: FloatingActionButton
-
     private var realm: Realm = Realm.getDefaultInstance()
     lateinit var adapter: SavedTourneysAdapter
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater!!.inflate(R.layout.fragment_saved, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_saved, container, false)
+    }
 
-        ButterKnife.bind(this, root)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
-
-        return root
     }
 
     private fun setUpRecyclerView() {
         val tournaments = realm.where(Tournament::class.java).findAllSorted("index", Sort.ASCENDING)
-        adapter = SavedTourneysAdapter(context, tournaments)
+        adapter = SavedTourneysAdapter(context!!, tournaments)
         rvSaved.setHasFixedSize(true)
         val manager = LinearLayoutManager(context)
         manager.orientation = LinearLayoutManager.VERTICAL

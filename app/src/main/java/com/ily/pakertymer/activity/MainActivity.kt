@@ -4,22 +4,14 @@ import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.widget.FrameLayout
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.ily.pakertymer.R
 import com.ily.pakertymer.fragment.SavedFragment
 import com.ily.pakertymer.fragment.SettingsFragment
 import com.ily.pakertymer.fragment.TimerFragment
-import com.roughike.bottombar.BottomBar
 import com.roughike.bottombar.OnTabSelectListener
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnTabSelectListener {
-
-    @BindView(R.id.bottomBar)
-    lateinit var bottomBar: BottomBar
-    @BindView(R.id.contentContainer)
-    lateinit var container: FrameLayout
 
     private var fragment: Fragment? = null
     private var currentTabId: Int = 0
@@ -27,7 +19,6 @@ class MainActivity : AppCompatActivity(), OnTabSelectListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        ButterKnife.bind(this)
         bottomBar.setOnTabSelectListener(this)
     }
 
