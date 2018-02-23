@@ -10,9 +10,6 @@ import android.view.ViewGroup
 import com.ily.pakertymer.R
 import com.ily.pakertymer.TimerApp
 import com.ily.pakertymer.adapter.SavedTourneysAdapter
-import com.ily.pakertymer.database.model.Level
-import com.ily.pakertymer.database.model.Tournament
-import io.realm.Realm
 
 /**
  * Created by ily on 20.10.2016.
@@ -20,7 +17,6 @@ import io.realm.Realm
 
 class SavedFragment : Fragment() {
 
-    private var realm: Realm = Realm.getDefaultInstance()
     lateinit var adapter: SavedTourneysAdapter
     private val tournamentDao = TimerApp.database.tournamentDao
     private val levelDao = TimerApp.database.levelDao
@@ -42,6 +38,9 @@ class SavedFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
+        adapter = SavedTourneysAdapter(arrayListOf(), {
+            //TODO: Switch to timer fragment
+        })
         /*val tournaments = realm.where(Tournament::class.java).findAllSorted("id", Sort.ASCENDING)
         adapter = SavedTourneysAdapter(context!!, tournaments)
         rvSaved.setHasFixedSize(true)

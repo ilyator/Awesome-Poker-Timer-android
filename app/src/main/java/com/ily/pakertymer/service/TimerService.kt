@@ -7,11 +7,10 @@ import android.os.IBinder
 import android.preference.PreferenceManager
 import android.support.v4.app.NotificationCompat
 import com.ily.pakertymer.R
+import com.ily.pakertymer.database.model.Tournament
 import com.ily.pakertymer.events.TickEvent
 import com.ily.pakertymer.events.TimerFinishedEvent
-import com.ily.pakertymer.database.model.Tournament
 import com.ily.pakertymer.util.TournamentTimer
-import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.text.SimpleDateFormat
@@ -26,18 +25,16 @@ class TimerService : Service() {
     private var timer: TournamentTimer? = null
     private var tournament: Tournament? = null
     private var sharedPreferences: SharedPreferences? = null
-    private var realm: Realm? = null
     private var timeFormat: SimpleDateFormat? = null
     private var timerCalendar: Calendar? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         val tournamentId: Int = intent?.getIntExtra(KEY_TOURNAMENT, -1) ?: sharedPreferences!!.getInt(KEY_TOURNAMENT, -1)
-        realm = Realm.getDefaultInstance()
         if (tournamentId != -1) {
             //tournament = realm!!.where(Tournament::class.java).equalTo("id", tournamentId).findFirst()
         }
-        //timer = TournamentTimer(tournament!!.currentLevel!!.duration, 1000)
+        timer = TournamentTimer(60000, 1000)
         timer!!.start()
         EventBus.getDefault().register(this)
         timeFormat = SimpleDateFormat("mm:ss", Locale.US)
@@ -68,11 +65,11 @@ class TimerService : Service() {
     fun onTimerTickEvent(tickEvent: TickEvent) {
         if (tournament != null) {
             updateNotification(tickEvent.millisUntilFinished)
-            if (realm != null) {
+            /*if (realm != null) {
                 realm!!.beginTransaction()
                 tournament!!.currentLevelTime = tickEvent.millisUntilFinished
                 realm!!.commitTransaction()
-            }
+            }*/
         }
     }
 

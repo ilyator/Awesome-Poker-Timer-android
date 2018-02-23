@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment
  */
 
 class SettingsFragment : Fragment() {
-    companion object Factory {
+    companion object {
         fun newInstance(): SettingsFragment {
             val args = Bundle()
             val fragment = SettingsFragment()
@@ -16,4 +16,5 @@ class SettingsFragment : Fragment() {
             return fragment
         }
     }
+
 }

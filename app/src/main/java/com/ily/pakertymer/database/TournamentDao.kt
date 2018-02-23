@@ -1,9 +1,7 @@
 package com.ily.pakertymer.database
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Transaction
+import android.arch.persistence.room.*
 import com.ily.pakertymer.database.model.Tournament
 import com.ily.pakertymer.database.model.TournamentWithLevels
 
@@ -22,5 +20,8 @@ interface TournamentDao : BaseDao<Tournament> {
     @Transaction
     @Query("SELECT * FROM Tournament")
     fun getTournamentsWithLevelsAsync(): LiveData<List<TournamentWithLevels>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(items: List<Tournament>): Array<Long>
 
 }

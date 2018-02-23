@@ -16,4 +16,5 @@ class Converters {
 
     @TypeConverter
     fun dateToTimestamp(date: Date?) = date?.time
+
 }

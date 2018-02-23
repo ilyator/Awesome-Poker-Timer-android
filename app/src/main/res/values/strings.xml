@@ -10,6 +10,6 @@
     <string name="default_tournament">Default Tournament</string>
 
     <string name="d_levels_d_minutes" formatted="false" >%d levels (%d minutes each)</string>
-    <string name="blinds_d_d" formatted="false" >Blinds: %d - %d</string>
+    <string name="blinds_d_d" formatted="false" >Starting blinds: %d - %d</string>
 
 </resources>

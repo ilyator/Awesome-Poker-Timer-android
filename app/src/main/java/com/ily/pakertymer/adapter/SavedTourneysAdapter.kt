@@ -1,6 +1,5 @@
 package com.ily.pakertymer.adapter
 
-import android.content.Context
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,21 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.ily.pakertymer.R
-import com.ily.pakertymer.listener.ItemTouchHelperAdapter
 import com.ily.pakertymer.database.model.Tournament
-import io.realm.Realm
-import io.realm.RealmResults
+import com.ily.pakertymer.listener.ItemTouchHelperAdapter
 import kotlinx.android.synthetic.main.item_tournament.view.*
 
 /**
  * Created by ily on 21.10.2016.
  */
 
-class SavedTourneysAdapter(private val context: Context,
-                           private val tournaments: List<Tournament>)
+class SavedTourneysAdapter(private val tournaments: List<Tournament>,
+                           private val onPlayClick: () -> Unit)
     : RecyclerView.Adapter<SavedTourneysAdapter.ViewHolder>(), ItemTouchHelperAdapter {
-
-    private val realm: Realm = Realm.getDefaultInstance()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val rootView = LayoutInflater.from(parent.context).inflate(R.layout.item_tournament, parent, false)
@@ -38,14 +33,8 @@ class SavedTourneysAdapter(private val context: Context,
     }
 
     override fun onItemDismiss(position: Int) {
-    /*    realm.executeTransaction {
-            try {
-                tournaments[position]!!.deleteFromRealm()
-                notifyItemRemoved(position)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }*/
+        //TODO: delete from db + add UNDO snackbar
+        notifyItemRemoved(position)
     }
 
     inner class ViewHolder(root: View) : RecyclerView.ViewHolder(root) {
@@ -57,24 +46,10 @@ class SavedTourneysAdapter(private val context: Context,
                 with(tournament) {
                     itemView.apply {
                         tvName.text = tournament.name
-                       // tvBlinds.text = TournamentsUtil.getBlindsInfo(context, tournament)
+                        // tvBlinds.text = TournamentsUtil.getBlindsInfo(context, tournament)
                         //tvLevels.text = TournamentsUtil.getLevelsInfo(context, tournament)
                         btnPlayPause.setOnClickListener {
-                            realm.executeTransaction({
-                                for (t in tournaments) {
-                                    if (t.id != tournament.id) {
-                                        t.isActive = false
-                                        t.isRunning = false
-                                    } else {
-                                        t.isRunning = !t.isRunning
-                                        t.isActive = true
-                                    }
-                                }
-                            })
-
-                            if (activeBtn != null)
-                                activeBtn!!.setImageResource(R.drawable.ic_play_arrow_white_24dp)
-                            setPlayBtn(tournament, btnPlayPause)
+                            onPlayClick.invoke()
                         }
                         cardView.setOnClickListener { Toast.makeText(context, "Open Tournament", Toast.LENGTH_SHORT).show() }
                     }

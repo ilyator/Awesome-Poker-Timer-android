@@ -12,9 +12,9 @@ import kotlinx.android.parcel.Parcelize
 @SuppressLint("ParcelCreator")
 @Parcelize
 @Entity
-data class Tournament(@PrimaryKey var id: Int,
-                      var name: String? = null,
+data class Tournament(var name: String? = null,
                       var isActive: Boolean = false,
                       var isRunning: Boolean = false,
-                      var currentLevelTime: Long = 0)
+                      var currentLevelTime: Long = 0,
+                      @PrimaryKey(autoGenerate = true) var id : Long = 0)
     : Parcelable

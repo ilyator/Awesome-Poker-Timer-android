@@ -6,18 +6,18 @@ import android.arch.persistence.room.*
  * Created by ily on 22.02.2018.
  */
 @Dao
-interface BaseDao<T> {
+interface BaseDao<in T> {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(items: T)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(items: T) : Long
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(vararg levels: T)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(vararg items: T) : Array<Long>
 
     @Update
-    fun update(vararg levels: T)
+    fun update(vararg items: T)
 
     @Delete
-    fun delete(vararg levels: T)
+    fun delete(vararg items: T)
 
 }

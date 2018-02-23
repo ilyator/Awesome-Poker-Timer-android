@@ -17,10 +17,10 @@ import kotlinx.android.parcel.Parcelize
         parentColumns = ["id"],
         childColumns = ["tournamentId"],
         onDelete = ForeignKey.CASCADE)])
-data class Level(@PrimaryKey var id: Int,
-                 var duration: Long = 0,
+data class Level(var duration: Long = 0,
                  var smallBlind: Int = 0,
                  var bigBlind: Int = 0,
                  var ante: Int = 0,
-                 val tournamentId: Int)
+                 val tournamentId: Long,
+                 @PrimaryKey(autoGenerate = true) var id : Long = 0)
     : Parcelable

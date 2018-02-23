@@ -13,19 +13,16 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.24.4'
-        classpath 'com.jakewharton:butterknife-gradle-plugin:8.6.0'
-        classpath "io.realm:realm-gradle-plugin:4.3.3"
+        classpath 'io.fabric.tools:gradle:1.25.1'
         classpath 'com.google.gms:google-services:3.1.2'
     }
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
-apply plugin: 'realm-android'
 
 androidExtensions {
     experimental = true
@@ -84,8 +81,6 @@ dependencies {
     //ViewModel & LiveData
     implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
     kapt "android.arch.lifecycle:compiler:$lifecycleVersion"
-    //Bottombar
-    implementation 'com.roughike:bottom-bar:2.3.1'
     //Eventbus
     implementation 'org.greenrobot:eventbus:3.0.0'
     //Crashlytics

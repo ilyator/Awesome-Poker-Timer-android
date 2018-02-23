@@ -1,14 +1,17 @@
 package com.ily.pakertymer.database
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy
+import android.arch.persistence.room.Query
 import com.ily.pakertymer.database.model.Level
 
 /**
  * Created by ily on 22.02.2018.
  */
 @Dao
-interface LevelDao: BaseDao<Level> {
+interface LevelDao : BaseDao<Level> {
 
     @Query("SELECT * FROM Level")
     fun getLevelsAsync(): LiveData<List<Level>>
@@ -21,5 +24,8 @@ interface LevelDao: BaseDao<Level> {
 
     @Query("SELECT * FROM Level WHERE tournamentId=:tournamentId")
     fun getLevelsForTournament(tournamentId: Int): List<Level>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(items: List<Level>): Array<Long>
 
 }

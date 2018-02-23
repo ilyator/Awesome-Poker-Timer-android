@@ -9,9 +9,7 @@ import android.view.ViewGroup
 import com.ily.pakertymer.R
 import com.ily.pakertymer.events.TickEvent
 import com.ily.pakertymer.events.TimerFinishedEvent
-import com.ily.pakertymer.database.model.Tournament
 import com.ily.pakertymer.service.TimerService
-import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_timer.*
 import kotlinx.android.synthetic.main.layout_level_navigation.*
 import org.greenrobot.eventbus.EventBus
@@ -25,7 +23,6 @@ import java.util.*
 
 class TimerFragment : Fragment() {
 
-    private var realm: Realm? = Realm.getDefaultInstance()
     private var timeFormat: SimpleDateFormat? = null
     private var timerCalendar: Calendar? = null
 
@@ -50,7 +47,7 @@ class TimerFragment : Fragment() {
         setOnClickListeners()
     }
 
-    fun setOnClickListeners() {
+    private fun setOnClickListeners() {
         btnPlayPause.setOnClickListener {
             val intent = Intent(context, TimerService::class.java)
             intent.putExtra(TimerService.KEY_TOURNAMENT, 1)

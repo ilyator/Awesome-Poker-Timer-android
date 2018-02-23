@@ -11,7 +11,8 @@ import org.greenrobot.eventbus.EventBus
 * Created by ily on 18/04/2017.
 */
 
-class TournamentTimer(millisInFuture: Long, countDownInterval: Long) : CountDownTimer(millisInFuture, countDownInterval) {
+class TournamentTimer(millisInFuture: Long, countDownInterval: Long)
+    : CountDownTimer(millisInFuture, countDownInterval) {
 
     override fun onTick(millisUntilFinished: Long) {
         EventBus.getDefault().post(TickEvent(millisUntilFinished))
