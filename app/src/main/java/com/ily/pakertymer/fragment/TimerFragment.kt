@@ -6,17 +6,14 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.ily.pakertymer.R
 import com.ily.pakertymer.events.TickEvent
 import com.ily.pakertymer.events.TimerFinishedEvent
-import com.ily.pakertymer.model.Tournament
+import com.ily.pakertymer.database.model.Tournament
 import com.ily.pakertymer.service.TimerService
-import com.ily.pakertymer.view.CircleTimerView
 import io.realm.Realm
+import kotlinx.android.synthetic.main.fragment_timer.*
+import kotlinx.android.synthetic.main.layout_level_navigation.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.text.SimpleDateFormat
@@ -28,28 +25,9 @@ import java.util.*
 
 class TimerFragment : Fragment() {
 
-    @BindView(R.id.iv_timer)
-    lateinit var ivTimer: CircleTimerView
-    @BindView(R.id.tv_timer)
-    lateinit var tvTimer: TextView
-
     private var realm: Realm? = Realm.getDefaultInstance()
     private var timeFormat: SimpleDateFormat? = null
     private var timerCalendar: Calendar? = null
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val tournament = realm!!.where(Tournament::class.java).equalTo("isActive", true).findFirst()
-
-        val root = inflater!!.inflate(R.layout.fragment_timer, container, false)
-        ButterKnife.bind(this, root)
-        if (tournament != null) {
-            ivTimer.setLevelFullTime(tournament.currentLevel!!.duration)
-            ivTimer.setLevelCurrentTime(tournament.currentLevel!!.duration)
-        }
-
-        return root
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         timeFormat = SimpleDateFormat("mm:ss", Locale.US)
@@ -57,11 +35,27 @@ class TimerFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    @OnClick(R.id.btn_play_pause)
-    fun onPlayPauseClicked() {
-        val intent = Intent(context, TimerService::class.java)
-        intent.putExtra(TimerService.KEY_TOURNAMENT, 1)
-        context?.startService(intent)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_timer, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        /*val tournament = realm!!.where(Tournament::class.java).equalTo("isActive", true).findFirst()
+        if (tournament != null) {
+            ivTimer.setLevelFullTime(tournament.currentLevel!!.duration)
+            ivTimer.setLevelCurrentTime(tournament.currentLevel!!.duration)
+        }*/
+
+        setOnClickListeners()
+    }
+
+    fun setOnClickListeners() {
+        btnPlayPause.setOnClickListener {
+            val intent = Intent(context, TimerService::class.java)
+            intent.putExtra(TimerService.KEY_TOURNAMENT, 1)
+            context?.startService(intent)
+        }
     }
 
     override fun onStart() {

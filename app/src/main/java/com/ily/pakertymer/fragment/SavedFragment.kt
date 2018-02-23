@@ -1,20 +1,18 @@
 package com.ily.pakertymer.fragment
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ily.pakertymer.R
+import com.ily.pakertymer.TimerApp
 import com.ily.pakertymer.adapter.SavedTourneysAdapter
-import com.ily.pakertymer.adapter.SimpleItemTouchHelperCallback
-import com.ily.pakertymer.model.Tournament
+import com.ily.pakertymer.database.model.Level
+import com.ily.pakertymer.database.model.Tournament
 import io.realm.Realm
-import io.realm.Sort
-import kotlinx.android.synthetic.main.fragment_saved.*
 
 /**
  * Created by ily on 20.10.2016.
@@ -24,6 +22,15 @@ class SavedFragment : Fragment() {
 
     private var realm: Realm = Realm.getDefaultInstance()
     lateinit var adapter: SavedTourneysAdapter
+    private val tournamentDao = TimerApp.database.tournamentDao
+    private val levelDao = TimerApp.database.levelDao
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        tournamentDao.getTournamentsWithLevelsAsync().observe(this, Observer { tournaments ->
+            tournaments?.forEach { Log.d("Tourney: ", it.toString()) }
+        })
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_saved, container, false)
@@ -31,11 +38,11 @@ class SavedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpRecyclerView()
+        //setUpRecyclerView()
     }
 
     private fun setUpRecyclerView() {
-        val tournaments = realm.where(Tournament::class.java).findAllSorted("index", Sort.ASCENDING)
+        /*val tournaments = realm.where(Tournament::class.java).findAllSorted("id", Sort.ASCENDING)
         adapter = SavedTourneysAdapter(context!!, tournaments)
         rvSaved.setHasFixedSize(true)
         val manager = LinearLayoutManager(context)
@@ -52,7 +59,7 @@ class SavedFragment : Fragment() {
                 if (dy < 0 && !btnAdd.isShown)
                     btnAdd.show()
             }
-        })
+        })*/
     }
 
     companion object {

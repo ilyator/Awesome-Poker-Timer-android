@@ -10,5 +10,7 @@
     <color name="timer_green_last">#10ba07</color>
 
     <color name="grey_transparent">#42616161</color>
+    <color name="white">@android:color/white</color>
+    <color name="gray">#a0bdbdbd</color>
 
 </resources>

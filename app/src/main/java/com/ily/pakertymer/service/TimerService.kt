@@ -9,7 +9,7 @@ import android.support.v4.app.NotificationCompat
 import com.ily.pakertymer.R
 import com.ily.pakertymer.events.TickEvent
 import com.ily.pakertymer.events.TimerFinishedEvent
-import com.ily.pakertymer.model.Tournament
+import com.ily.pakertymer.database.model.Tournament
 import com.ily.pakertymer.util.TournamentTimer
 import io.realm.Realm
 import org.greenrobot.eventbus.EventBus
@@ -35,9 +35,9 @@ class TimerService : Service() {
         val tournamentId: Int = intent?.getIntExtra(KEY_TOURNAMENT, -1) ?: sharedPreferences!!.getInt(KEY_TOURNAMENT, -1)
         realm = Realm.getDefaultInstance()
         if (tournamentId != -1) {
-            tournament = realm!!.where(Tournament::class.java).equalTo("index", tournamentId).findFirst()
+            //tournament = realm!!.where(Tournament::class.java).equalTo("id", tournamentId).findFirst()
         }
-        timer = TournamentTimer(tournament!!.currentLevel!!.duration, 1000)
+        //timer = TournamentTimer(tournament!!.currentLevel!!.duration, 1000)
         timer!!.start()
         EventBus.getDefault().register(this)
         timeFormat = SimpleDateFormat("mm:ss", Locale.US)
