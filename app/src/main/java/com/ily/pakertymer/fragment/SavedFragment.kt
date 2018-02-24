@@ -3,13 +3,17 @@ package com.ily.pakertymer.fragment
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ily.pakertymer.R
 import com.ily.pakertymer.TimerApp
 import com.ily.pakertymer.adapter.SavedTourneysAdapter
+import com.ily.pakertymer.database.model.TournamentWithLevels
+import com.ily.pakertymer.events.TournamentStartedEvent
+import kotlinx.android.synthetic.main.fragment_saved.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  * Created by ily on 20.10.2016.
@@ -19,14 +23,6 @@ class SavedFragment : Fragment() {
 
     lateinit var adapter: SavedTourneysAdapter
     private val tournamentDao = TimerApp.database.tournamentDao
-    private val levelDao = TimerApp.database.levelDao
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        tournamentDao.getTournamentsWithLevelsAsync().observe(this, Observer { tournaments ->
-            tournaments?.forEach { Log.d("Tourney: ", it.toString()) }
-        })
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_saved, container, false)
@@ -34,35 +30,20 @@ class SavedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //setUpRecyclerView()
+        tournamentDao.getTournamentsWithLevelsAsync().observe(this, Observer { tournaments ->
+            tournaments?.let { setUpRecyclerView(it) }
+        })
     }
 
-    private fun setUpRecyclerView() {
-        adapter = SavedTourneysAdapter(arrayListOf(), {
-            //TODO: Switch to timer fragment
+    private fun setUpRecyclerView(tournamentWithLevels: List<TournamentWithLevels>) {
+        adapter = SavedTourneysAdapter(tournamentWithLevels, {
+            EventBus.getDefault().post(TournamentStartedEvent(it))
         })
-        /*val tournaments = realm.where(Tournament::class.java).findAllSorted("id", Sort.ASCENDING)
-        adapter = SavedTourneysAdapter(context!!, tournaments)
-        rvSaved.setHasFixedSize(true)
-        val manager = LinearLayoutManager(context)
-        manager.orientation = LinearLayoutManager.VERTICAL
-        rvSaved.layoutManager = manager
+        rvSaved.layoutManager = LinearLayoutManager(context)
         rvSaved.adapter = adapter
-        val callback = SimpleItemTouchHelperCallback(adapter)
-        val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(rvSaved)
-        rvSaved.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                if (dy > 0 && btnAdd.isShown)
-                    btnAdd.hide()
-                if (dy < 0 && !btnAdd.isShown)
-                    btnAdd.show()
-            }
-        })*/
     }
 
     companion object {
-
         fun newInstance(): SavedFragment {
             val args = Bundle()
             val fragment = SavedFragment()

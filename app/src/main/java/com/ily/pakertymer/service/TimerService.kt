@@ -6,8 +6,9 @@ import android.content.SharedPreferences
 import android.os.IBinder
 import android.preference.PreferenceManager
 import android.support.v4.app.NotificationCompat
+import com.ily.pakertymer.Constants.SP_KEY_TOURNAMENT
 import com.ily.pakertymer.R
-import com.ily.pakertymer.database.model.Tournament
+import com.ily.pakertymer.database.model.TournamentWithLevels
 import com.ily.pakertymer.events.TickEvent
 import com.ily.pakertymer.events.TimerFinishedEvent
 import com.ily.pakertymer.util.TournamentTimer
@@ -23,21 +24,20 @@ import java.util.*
 class TimerService : Service() {
 
     private var timer: TournamentTimer? = null
-    private var tournament: Tournament? = null
+    private var tournamentWithLevels: TournamentWithLevels? = null
     private var sharedPreferences: SharedPreferences? = null
-    private var timeFormat: SimpleDateFormat? = null
+    private var timeFormat: SimpleDateFormat = SimpleDateFormat("mm:ss", Locale.US)
     private var timerCalendar: Calendar? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val tournamentId: Int = intent?.getIntExtra(KEY_TOURNAMENT, -1) ?: sharedPreferences!!.getInt(KEY_TOURNAMENT, -1)
-        if (tournamentId != -1) {
-            //tournament = realm!!.where(Tournament::class.java).equalTo("id", tournamentId).findFirst()
-        }
-        timer = TournamentTimer(60000, 1000)
-        timer!!.start()
-        EventBus.getDefault().register(this)
-        timeFormat = SimpleDateFormat("mm:ss", Locale.US)
+        tournamentWithLevels = intent?.getParcelableExtra(SP_KEY_TOURNAMENT)
+        timer = TournamentTimer(tournamentWithLevels
+                ?.tournament?.currentLevel?.duration ?: 60000,
+                1000)
+        timer?.start()
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this)
         timerCalendar = Calendar.getInstance()
         return Service.START_STICKY_COMPATIBILITY
     }
@@ -52,24 +52,22 @@ class TimerService : Service() {
     }
 
     private fun updateNotification(timeLeftInMillis: Long) {
-        timerCalendar!!.timeInMillis = timeLeftInMillis
+        timerCalendar?.timeInMillis = timeLeftInMillis
+        //TODO: use notification channel
         val mBuilder = NotificationCompat.Builder(applicationContext)
                 .setAutoCancel(false)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Timer is running")
-                .setContentText(timeFormat!!.format(timerCalendar!!.time))
+                .setOngoing(true)
+                .setContentText(timeFormat.format(timerCalendar!!.time))
         startForeground(1337, mBuilder.build())
     }
 
     @Subscribe
     fun onTimerTickEvent(tickEvent: TickEvent) {
-        if (tournament != null) {
+        if (tournamentWithLevels != null) {
             updateNotification(tickEvent.millisUntilFinished)
-            /*if (realm != null) {
-                realm!!.beginTransaction()
-                tournament!!.currentLevelTime = tickEvent.millisUntilFinished
-                realm!!.commitTransaction()
-            }*/
+            tournamentWithLevels?.tournament?.currentLevelTime = tickEvent.millisUntilFinished
         }
     }
 
@@ -77,11 +75,6 @@ class TimerService : Service() {
     fun onTimerFinishedEvent(timerFinishedEvent: TimerFinishedEvent) {
         stopForeground(true)
         stopSelf()
-    }
-
-    companion object {
-
-        var KEY_TOURNAMENT = "key_tournament"
     }
 
 }

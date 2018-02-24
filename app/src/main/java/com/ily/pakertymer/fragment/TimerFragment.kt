@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ily.pakertymer.Constants.SP_KEY_TOURNAMENT
 import com.ily.pakertymer.R
+import com.ily.pakertymer.database.model.TournamentWithLevels
 import com.ily.pakertymer.events.TickEvent
 import com.ily.pakertymer.events.TimerFinishedEvent
 import com.ily.pakertymer.service.TimerService
@@ -23,13 +25,13 @@ import java.util.*
 
 class TimerFragment : Fragment() {
 
-    private var timeFormat: SimpleDateFormat? = null
-    private var timerCalendar: Calendar? = null
+    private val timeFormat = SimpleDateFormat("mm:ss", Locale.US)
+    private val timerCalendar = Calendar.getInstance()
+    private var tournamentWithLevels: TournamentWithLevels? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        timeFormat = SimpleDateFormat("mm:ss", Locale.US)
-        timerCalendar = Calendar.getInstance()
         super.onCreate(savedInstanceState)
+        tournamentWithLevels = arguments?.getParcelable(SP_KEY_TOURNAMENT)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,19 +40,20 @@ class TimerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*val tournament = realm!!.where(Tournament::class.java).equalTo("isActive", true).findFirst()
-        if (tournament != null) {
-            ivTimer.setLevelFullTime(tournament.currentLevel!!.duration)
-            ivTimer.setLevelCurrentTime(tournament.currentLevel!!.duration)
-        }*/
+        tournamentWithLevels?.tournament?.currentLevel = tournamentWithLevels?.levels?.get(0)
+        tournamentWithLevels?.tournament?.currentLevel?.duration?.let {
+            ivTimer.setLevelFullTime(it)
+            ivTimer.setLevelCurrentTime(it)
+        }
 
         setOnClickListeners()
+        btnPlayPause.performClick()
     }
 
     private fun setOnClickListeners() {
         btnPlayPause.setOnClickListener {
             val intent = Intent(context, TimerService::class.java)
-            intent.putExtra(TimerService.KEY_TOURNAMENT, 1)
+            intent.putExtra(SP_KEY_TOURNAMENT, tournamentWithLevels)
             context?.startService(intent)
         }
     }
@@ -67,8 +70,8 @@ class TimerFragment : Fragment() {
 
     @Subscribe
     fun onTimerTickEvent(tickEvent: TickEvent) {
-        timerCalendar!!.timeInMillis = tickEvent.millisUntilFinished
-        tvTimer.text = timeFormat!!.format(timerCalendar!!.time)
+        timerCalendar.timeInMillis = tickEvent.millisUntilFinished
+        tvTimer.text = timeFormat.format(timerCalendar.time)
         ivTimer.setLevelCurrentTime(tickEvent.millisUntilFinished)
     }
 
@@ -79,8 +82,9 @@ class TimerFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): TimerFragment {
+        fun newInstance(tournamentWithLevels: TournamentWithLevels): TimerFragment {
             val args = Bundle()
+            args.putParcelable(SP_KEY_TOURNAMENT, tournamentWithLevels)
             val fragment = TimerFragment()
             fragment.arguments = args
             return fragment
