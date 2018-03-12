@@ -9,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.ily.pakertymer.R
 import com.ily.pakertymer.TimerApp
+import com.ily.pakertymer.activity.NewTournamentActivity
+import com.ily.pakertymer.adapter.NewLevelsAdapter
 import com.ily.pakertymer.adapter.SavedTourneysAdapter
 import com.ily.pakertymer.database.model.TournamentWithLevels
 import com.ily.pakertymer.events.TournamentStartedEvent
 import kotlinx.android.synthetic.main.fragment_saved.*
 import org.greenrobot.eventbus.EventBus
+import org.jetbrains.anko.startActivity
 
 /**
  * Created by ily on 20.10.2016.
@@ -33,6 +36,7 @@ class SavedFragment : Fragment() {
         tournamentDao.getTournamentsWithLevelsAsync().observe(this, Observer { tournaments ->
             tournaments?.let { setUpRecyclerView(it) }
         })
+        setOnClickListeners()
     }
 
     private fun setUpRecyclerView(tournamentWithLevels: List<TournamentWithLevels>) {
@@ -41,6 +45,12 @@ class SavedFragment : Fragment() {
         })
         rvSaved.layoutManager = LinearLayoutManager(context)
         rvSaved.adapter = adapter
+    }
+
+    private fun setOnClickListeners() {
+        btnAdd.setOnClickListener {
+            context?.startActivity<NewTournamentActivity>()
+        }
     }
 
     companion object {

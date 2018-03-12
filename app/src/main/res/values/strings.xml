@@ -12,4 +12,13 @@
     <string name="d_levels_d_minutes" formatted="false" >%d levels (%d minutes each)</string>
     <string name="blinds_d_d" formatted="false" >Starting blinds: %d - %d</string>
 
+    <!-- New Tournament Activity -->
+    <string name="new_tournament">New Tournament</string>
+    <string name="save">Save</string>
+    <string name="choose_preset">Choose preset</string>
+    <string name="duration">Duration</string>
+    <string name="small_blind">S.blind</string>
+    <string name="big_blind">B.blind</string>
+    <string name="ante">Ante</string>
+
 </resources>

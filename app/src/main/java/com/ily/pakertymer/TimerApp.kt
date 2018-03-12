@@ -2,11 +2,9 @@ package com.ily.pakertymer
 
 import android.app.Application
 import android.preference.PreferenceManager
-import com.crashlytics.android.Crashlytics
 import com.ily.pakertymer.Constants.IS_FIRST_LAUNCH
 import com.ily.pakertymer.database.PTDatabase
 import com.ily.pakertymer.util.TournamentsUtil
-import io.fabric.sdk.android.Fabric
 
 /**
  * Created by ily on 21.10.2016.
@@ -17,7 +15,7 @@ class TimerApp : Application() {
     override fun onCreate() {
         super.onCreate()
         //Crashlytics init
-        Fabric.with(this, Crashlytics())
+        //Fabric.with(this, Crashlytics())
 
         database = PTDatabase.create(this)
         instance = this

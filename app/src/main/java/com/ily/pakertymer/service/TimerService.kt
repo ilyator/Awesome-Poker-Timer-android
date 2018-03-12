@@ -32,6 +32,7 @@ class TimerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
         tournamentWithLevels = intent?.getParcelableExtra(SP_KEY_TOURNAMENT)
+        timer?.cancel()
         timer = TournamentTimer(tournamentWithLevels
                 ?.tournament?.currentLevel?.duration ?: 60000,
                 1000)
