@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hint="@string/duration"
-            android:inputType="textEmailAddress"
+            android:inputType="number"
             android:textSize="16sp" />
 
     </android.support.design.widget.TextInputLayout>
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hint="@string/small_blind"
-            android:inputType="textEmailAddress"
+            android:inputType="number"
             android:textSize="16sp" />
 
     </android.support.design.widget.TextInputLayout>
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hint="@string/big_blind"
-            android:inputType="textEmailAddress"
+            android:inputType="number"
             android:textSize="16sp" />
 
     </android.support.design.widget.TextInputLayout>
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hint="@string/ante"
-            android:inputType="textEmailAddress"
+            android:inputType="number"
             android:textSize="16sp" />
 
     </android.support.design.widget.TextInputLayout>

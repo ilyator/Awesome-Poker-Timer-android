@@ -1,10 +1,10 @@
 buildscript {
     ext {
-        anko_version = '0.10.3'
-        ktx_version = '0.1'
-        support_version = '27.0.2'
-        roomVersion = '1.0.0'
-        lifecycleVersion = '1.1.0'
+        anko_version = '0.10.5'
+        ktx_version = '0.3'
+        support_version = '27.1.1'
+        roomVersion = '1.1.1'
+        lifecycleVersion = '1.1.1'
     }
 
     repositories {

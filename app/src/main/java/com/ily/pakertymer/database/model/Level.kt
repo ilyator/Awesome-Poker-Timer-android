@@ -21,6 +21,6 @@ data class Level(var duration: Long = 0,
                  var smallBlind: Int = 0,
                  var bigBlind: Int = 0,
                  var ante: Int = 0,
-                 val tournamentId: Long,
+                 var tournamentId: Long,
                  @PrimaryKey(autoGenerate = true) var id : Long = 0)
     : Parcelable

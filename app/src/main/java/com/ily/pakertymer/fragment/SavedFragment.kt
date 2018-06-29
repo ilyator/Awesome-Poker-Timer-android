@@ -40,9 +40,9 @@ class SavedFragment : Fragment() {
     }
 
     private fun setUpRecyclerView(tournamentWithLevels: List<TournamentWithLevels>) {
-        adapter = SavedTourneysAdapter(tournamentWithLevels, {
+        adapter = SavedTourneysAdapter(tournamentWithLevels) {
             EventBus.getDefault().post(TournamentStartedEvent(it))
-        })
+        }
         rvSaved.layoutManager = LinearLayoutManager(context)
         rvSaved.adapter = adapter
     }

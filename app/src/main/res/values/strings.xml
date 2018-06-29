@@ -20,5 +20,8 @@
     <string name="small_blind">S.blind</string>
     <string name="big_blind">B.blind</string>
     <string name="ante">Ante</string>
+    <string name="tournament_name">Tournament name</string>
+    <string name="fill_name">Please fill in the name of the tournament</string>
+    <string name="tournament_created">Tournament created</string>
 
 </resources>
