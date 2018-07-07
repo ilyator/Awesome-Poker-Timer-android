@@ -45,12 +45,14 @@ class NewTournamentActivity : AppCompatActivity() {
 
     private fun initLevels() {
         levels.add(Level(0, 0, 0, 0, 0, 0))
-        levels.map { LayoutInflater.from(this).inflate(R.layout.row_new_level, llLevels, false) }
-                .zip(levels)
-                .forEach {
-                    bindLevel(it.first, it.second)
-                    llLevels.addView(it.first)
-                }
+        levels.map {
+            val view = LayoutInflater.from(this).inflate(R.layout.row_new_level, llLevels, false)
+            bindLevel(view, it)
+            llLevels.addView(view)
+            view
+        }.filter {
+            it.visibility == View.VISIBLE
+        }
         svLevels.fullScroll(View.FOCUS_DOWN)
     }
 
